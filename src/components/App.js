@@ -3,7 +3,6 @@ import SearchBar from "./SearchBar";
 
 class App extends React.Component {
   onTermSubmit = (term) => {
-    console.log("entered onFormSumbit");
     console.log(term);
   };
 
