@@ -7,13 +7,20 @@ import VideoDetails from "./VideoDetails";
 class App extends React.Component {
   state = { videos: [], selectedVideo: null };
 
+  componentDidMount() {
+    this.onTermSubmit("apple"); // a default search term so the page wont be blank when loaded
+  }
+
   onTermSubmit = async (term) => {
     const response = await Youtube.get("/search", {
       params: {
         q: term,
       },
     });
-    this.setState({ videos: response.data.items });
+    this.setState({
+      videos: response.data.items,
+      selectedVideo: response.data.items[0],
+    });
     console.log(this.state.videos);
   };
 
@@ -26,11 +33,19 @@ class App extends React.Component {
     return (
       <div className="ui container">
         <SearchBar onFormSubmit={this.onTermSubmit} />
-        <VideoDetails selectedVideo={this.state.selectedVideo} />
-        <VideoList
-          videos={this.state.videos}
-          onVideoSelect={this.onVideoSelect}
-        ></VideoList>
+        <div className="ui grid">
+          <div className="ui row">
+            <div className="eleven wide column">
+              <VideoDetails selectedVideo={this.state.selectedVideo} />
+            </div>
+            <div className="five wide column">
+              <VideoList
+                videos={this.state.videos}
+                onVideoSelect={this.onVideoSelect}
+              ></VideoList>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
